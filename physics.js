@@ -48,6 +48,16 @@ function setupBird(){
 function drawBirds(){
   push();
   //your code here
+  fill(255,0,0);
+  for (var i = 0; i < birds.length; i++){
+    drawVertices(birds[i].vertices);
+    if (isOffScreen(birds[i])){
+      removeFromWorld(birds[i]);
+      birds.splice(i,1);
+      i--;
+    }
+  }
+  console.log(birds.length);
   pop();
 }
 ////////////////////////////////////////////////////////////////
