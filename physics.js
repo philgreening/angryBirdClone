@@ -57,19 +57,36 @@ function drawBirds(){
       i--;
     }
   }
-  console.log(birds.length);
+  console.log("birds: " + birds.length);
   pop();
 }
 ////////////////////////////////////////////////////////////////
 //creates a tower of boxes
 function setupTower(){
   //you code here
+  var xpos = 800;
+  var ypos = height -80;
+
+  for (var i = 0; i < 6; i++){
+    for (var j = 0; j < 3; j++){
+      var box = Bodies.rectangle(xpos - j * 80, ypos - i * 80, 80, 80);
+      World.add(engine.world, [box]);
+      boxes.push(box);
+      colors.push(random(50, 255));
+    }
+  }
+  console.log("boxes: " + boxes.length);
 }
 ////////////////////////////////////////////////////////////////
 //draws tower of boxes
 function drawTower(){
   push();
   //your code here
+ //fill(255);
+  for (var i = 0; i < boxes.length; i++){
+    fill(0,colors[i], 0);
+    drawVertices(boxes[i].vertices);
+  }
   pop();
 }
 ////////////////////////////////////////////////////////////////
