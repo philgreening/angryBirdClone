@@ -96,9 +96,8 @@ function setupSlingshot(){
   Matter.Body.setMass(slingshotBird, slingshotBird.mass * 10);
   slingshotConstraint = Constraint.create({
     //bodyA: slingshotBird,
-    pointA: {x:200, y:180},
+    pointA: {x:200, y:175},
     bodyB:slingshotBird,
-    ///pointB:{x: 0, y: 0},
     stiffness: 0.01,
     damping: 0.0001
   })
