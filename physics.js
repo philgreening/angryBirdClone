@@ -57,15 +57,15 @@ function drawBirds(){
       i--;
     }
   }
-  console.log("birds: " + birds.length);
   pop();
+  console.log("birds: " + birds.length);
 }
 ////////////////////////////////////////////////////////////////
 //creates a tower of boxes
 function setupTower(){
   //you code here
-  var xpos = 800;
-  var ypos = height -80;
+  var xpos = width - 160;
+  var ypos = height - 40;
 
   for (var i = 0; i < 6; i++){
     for (var j = 0; j < 3; j++){
@@ -82,7 +82,7 @@ function setupTower(){
 function drawTower(){
   push();
   //your code here
- //fill(255);
+  noStroke();
   for (var i = 0; i < boxes.length; i++){
     fill(0,colors[i], 0);
     drawVertices(boxes[i].vertices);
@@ -92,12 +92,27 @@ function drawTower(){
 ////////////////////////////////////////////////////////////////
 function setupSlingshot(){
 //your code here
+  slingshotBird = Bodies.circle(200, 200, 20, {friction: 0, restitution: 0.95});
+  Matter.Body.setMass(slingshotBird, slingshotBird.mass * 10);
+  slingshotConstraint = Constraint.create({
+    //bodyA: slingshotBird,
+    pointA: {x:200, y:180},
+    bodyB:slingshotBird,
+    ///pointB:{x: 0, y: 0},
+    stiffness: 0.01,
+    damping: 0.0001
+  })
+  World.add(engine.world, [slingshotBird, slingshotConstraint]);
 }
 ////////////////////////////////////////////////////////////////
 //draws slingshot bird and its constraint
 function drawSlingshot(){
   push();
   // your code here
+  fill(255,165,0);
+  drawVertices(slingshotBird.vertices);
+  fill(255);
+  drawConstraint(slingshotConstraint);
   pop();
 }
 /////////////////////////////////////////////////////////////////
