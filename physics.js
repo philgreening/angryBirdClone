@@ -9,7 +9,7 @@ function setupGround(){
 ////////////////////////////////////////////////////////////////
 function drawGround(){
   push();
-  fill(128);
+  fill(150, 75, 0);
   drawVertices(ground.vertices);
   pop();
 }
@@ -58,8 +58,8 @@ function drawBirds(){
     }
   }
   pop();
-  console.log("birds: " + birds.length);
 }
+
 ////////////////////////////////////////////////////////////////
 //creates a tower of boxes
 function setupTower(){
@@ -75,7 +75,6 @@ function setupTower(){
       colors.push(random(50, 255));
     }
   }
-  console.log("boxes: " + boxes.length);
 }
 ////////////////////////////////////////////////////////////////
 //draws tower of boxes
@@ -86,16 +85,43 @@ function drawTower(){
   for (var i = 0; i < boxes.length; i++){
     fill(0,colors[i], 0);
     drawVertices(boxes[i].vertices);
+    if (isOffScreen(boxes[i])){
+      removeFromWorld(boxes[i]);
+      boxes.splice(i,1);
+      i--;
+    }
   }
   pop();
 }
+////////////////////////////////////////////////////////////////
+//set up the clouds
+function setupClouds(){
+  var xPos = width/2;
+  var yPos = height/5;
+
+  for (var i = 0; i < 2; i++){
+    var cloud = Bodies.circle(xPos - i * 200, yPos - i * -200, 40, {isStatic:true});
+    World.add(engine.world, [cloud])
+    clouds.push(cloud);
+  }
+}
+//draw the clouds
+function drawClouds(){
+  for (var i = 0; i < clouds.length; i++) {
+    push();
+    imageMode(CENTER);
+    image(cloudImg, width/2 - i * 200, height/5 - i * -200);
+    cloudImg.resize(150, 75);
+    pop();
+  }
+}
+
 ////////////////////////////////////////////////////////////////
 function setupSlingshot(){
 //your code here
   slingshotBird = Bodies.circle(200, 200, 20, {friction: 0, restitution: 0.95});
   Matter.Body.setMass(slingshotBird, slingshotBird.mass * 10);
   slingshotConstraint = Constraint.create({
-    //bodyA: slingshotBird,
     pointA: {x:200, y:175},
     bodyB:slingshotBird,
     stiffness: 0.01,
@@ -108,10 +134,10 @@ function setupSlingshot(){
 function drawSlingshot(){
   push();
   // your code here
-  fill(255,165,0);
-  drawVertices(slingshotBird.vertices);
   fill(255);
   drawConstraint(slingshotConstraint);
+  fill(255,165,0);
+  drawVertices(slingshotBird.vertices);
   pop();
 }
 /////////////////////////////////////////////////////////////////

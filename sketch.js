@@ -14,17 +14,31 @@ var engine;
 var propeller;
 var boxes = [];
 var birds = [];
+var clouds = [];
+var cloudImg;
 var colors = [];
 var ground;
 var slingshotBird, slingshotConstraint;
 var angle=0;
 var angleSpeed=0;
 var canvas;
+var countdown;
+
 ////////////////////////////////////////////////////////////
+
+//loads in the cloud image
+function preload(){
+  cloudImg = loadImage('assets/cloud.png')
+}
+
 function setup() {
   canvas = createCanvas(1000, 600);
 
   engine = Engine.create();  // create an engine
+
+  //sets the countdown time to 1 second intervals
+  setInterval(countDownTimer, 1000);
+  countdown = 60;
 
   setupGround();
 
@@ -32,13 +46,16 @@ function setup() {
 
   setupTower();
 
+  setupClouds();
+
   setupSlingshot();
 
   setupMouseInteraction();
+
 }
 ////////////////////////////////////////////////////////////
 function draw() {
-  background(0);
+  background(135,206,235);
 
   Engine.update(engine);
 
@@ -48,9 +65,13 @@ function draw() {
 
   drawTower();
 
+  drawClouds();
+
   drawBirds();
 
   drawSlingshot();
+
+  drawStats();
 }
 ////////////////////////////////////////////////////////////
 //use arrow keys to control propeller
@@ -77,6 +98,48 @@ function keyTyped(){
     removeFromWorld(slingshotConstraint);
     setupSlingshot();
   }
+}
+
+//decrements the countdown timer
+function countDownTimer(){
+  countdown --;
+}
+
+//draws the countdown timer and number of boxes
+//calls game over if timer reaches 0 or youWon if boxes reaches 0
+function drawStats(){
+  fill (255);
+  noStroke();
+  textSize(25);
+  text("Time Left: " + countdown, 20, 50);
+  text("Boxes: " + boxes.length,  width - 140, 50);
+
+  if (countdown === 0){
+    gameOver();
+  }
+  if (boxes.length === 0){
+    youWon();
+  }
+}
+
+//displays game over message if countdown reaches 0
+function gameOver(){
+
+  fill(255);
+  textSize(80);
+  textAlign(CENTER);
+  text("GAME OVER", width/2, height/2)
+  noLoop();
+}
+
+//displays you win message if no boxes are on screen
+function youWon(){
+
+  fill(255);
+  textSize(80);
+  textAlign(CENTER);
+  text("YOU WIN", width/2, height/2)
+  noLoop();
 }
 
 //**********************************************************************
@@ -133,3 +196,6 @@ function drawConstraint(constraint) {
   );
   pop();
 }
+
+
+
